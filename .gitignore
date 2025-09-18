@@ -1,0 +1,7 @@
+# Contenido para tu archivo .gitignore
+
+# Ignorar la carpeta del Entorno Virtual
+venv/
+
+# Ignorar la carpeta de Caché de Python
+__pycache__/
