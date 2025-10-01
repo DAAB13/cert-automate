@@ -22,7 +22,7 @@ def procesar_solicitudes():
     )
     procesar_solicitudes = df[
       (~df['Código'].isin(config.EXCLUIR_VALORES)) & (df['Estado'].isna())
-    ].dropna(subset=['Año'])
+    ].dropna(subset=['Año'])Pra
 
     if procesar_solicitudes.empty:
       print("👍No se encontraron nuevas solicitudes pendientes")
