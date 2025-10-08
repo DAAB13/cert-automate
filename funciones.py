@@ -76,19 +76,31 @@ def procesar_nivel(fila, idioma, detalle_servicio):
 
 
 def formatear_longitud_nombre(nombre_str):
-  normal_length = 35
+  normal_length = 31
   normal_fz = 36
-  long_length = 36
-  long_fz = 35
-  very_long_fz = 34
+  length_32 = 32
+  l32_fz = 35
+  length_33 = 33
+  l33_fz = 34
+  length_34 = 34
+  l34_fz = 33
+  length_35 = 35
+  l35_fz = 32
+  very_long_fz = 30
 
   rt = RichText() # crea un objeto de texto enriquecido vacío
   longitud_nombre = len(nombre_str)
 
   if longitud_nombre <= normal_length:
     font_size = normal_fz
-  elif longitud_nombre <= long_length:
-    font_size = long_fz
+  elif longitud_nombre == length_32:
+    font_size = l32_fz
+  elif longitud_nombre == length_33:
+    font_size = l33_fz
+  elif longitud_nombre == length_34:
+    font_size = l34_fz
+  elif longitud_nombre == length_35:
+    font_size = l35_fz
   else:
     font_size = very_long_fz
   rt.add(
@@ -166,7 +178,7 @@ def crear_qr_firmar(fila, ruta_pdf):
   #construir el texto de validacióm para el qr
   nombre_qr = fila['Nombres']
   codigo_qr = fila['Código']
-  correo_validacion = 'idiomas@oficinas-upc.pe'
+  correo_validacion = 'idiomas@oficinas-upch.pe'
 
   texto_qr = f"""
 Idiomas Cayetano
@@ -186,9 +198,16 @@ Para corroborar la autenticidad de este documneto, por favor envíe un correo a:
   #Insertar qr en el pdf
   doc_pdf = fitz.open(ruta_pdf) #abre el documneto pdf que fue creaado en la fase anterior
   pagina = doc_pdf[0] #la primera página
-  ancho_qr = 72 #1 inch
-  pos_x = pagina.rect.width - ancho_qr - 36
-  pos_y = pagina.rect.height - ancho_qr - 36
+  ancho_qr = 95 #1 inch
+
+  detalle_servicio = fila['Detalle de servicio']
+  if "Examen de comprensión de textos" in detalle_servicio:
+    pos_x = pagina.rect.width - ancho_qr - 70
+    pos_y = pagina.rect.height - ancho_qr - 99
+  else:
+    pos_x = 95
+    pos_y = pagina.rect.height - ancho_qr - 68
+
   rectangulo_qr = fitz.Rect(pos_x, pos_y, pos_x + ancho_qr, pos_y + ancho_qr)
   pagina.insert_image(rectangulo_qr, filename = ruta_qr_temp)
 

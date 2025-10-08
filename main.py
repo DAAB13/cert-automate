@@ -16,13 +16,11 @@ def procesar_solicitudes():
   try:    #--- FASE 1: LEER ARCHIVO EXCEL ---#
     df = pd.read_excel(
       config.RUTA_EXCEL,
-      sheet_name="Cert-Cons",
-      skiprows=3,
-      usecols="B:X"
+      sheet_name="cert-cons"
     )
     procesar_solicitudes = df[
       (~df['Código'].isin(config.EXCLUIR_VALORES)) & (df['Estado'].isna())
-    ].dropna(subset=['Año'])Pra
+    ].dropna(subset=['Año'])
 
     if procesar_solicitudes.empty:
       print("👍No se encontraron nuevas solicitudes pendientes")

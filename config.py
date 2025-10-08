@@ -1,4 +1,4 @@
-RUTA_EXCEL = r"C:\Users\Diego AB\OneDrive - Universidad Peruana Cayetano Heredia\Idiomas Cayetano\Certificados, Constancias y Validaciones\Servicios académicos Certificados-constancias.xlsx"
+RUTA_EXCEL = r"C:\Users\Diego AB\OneDrive - Universidad Peruana Cayetano Heredia\Idiomas Cayetano\Certificados, Constancias y Validaciones\Servicios académicos - certificados y constancias.xlsx"
 RUTA_PLANTILLAS = r"C:\Users\Diego AB\OneDrive - Universidad Peruana Cayetano Heredia\Idiomas Cayetano\Certificados, Constancias y Validaciones\Repositorio constancias y validaciones\plantillas"
 RUTA_SALIDAS = r"C:\Users\Diego AB\OneDrive - Universidad Peruana Cayetano Heredia\Diego\CERTIFICADOS PYTHON"
 RUTA_TEMP_QR = r"C:\Users\Diego AB\OneDrive - Universidad Peruana Cayetano Heredia\Diego\CERTIFICADOS PYTHON\QR"
