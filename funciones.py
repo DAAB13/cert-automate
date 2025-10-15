@@ -184,7 +184,7 @@ Para corroborar la autenticidad de este documneto, por favor envíe un correo a:
 """
   #Creación de la imagen QR
   qr_img = qrcode.make(texto_qr)
-  ruta_qr_temp = os.path.join(config.RUTA_TEMP_QR, f"{fila['Código']}_qr.png")
+  ruta_qr_temp = os.path.join(config.RUTA_TEMP_QR, f"{fila['Código']}_qr.png") 
   qr_img.save(ruta_qr_temp)
   print("imagen QR de validación creada")
 

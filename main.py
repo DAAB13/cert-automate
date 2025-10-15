@@ -4,6 +4,9 @@ import funciones
 import os
 import locale
 
+# Control para activar / desactivar el QR
+GENERAR_QR = False
+
 try:
   locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 except locale.Error:
@@ -32,7 +35,8 @@ def procesar_solicitudes():
       ruta_pdf = funciones.generar_documento(fila) # capturamos la ruta del pdf
       #verificamos si el doc se creó corrextamente antes de continuar
       if ruta_pdf and os.path.exists(ruta_pdf):
-        funciones.crear_qr_firmar(fila, ruta_pdf)
+        if GENERAR_QR:
+          funciones.crear_qr_firmar(fila, ruta_pdf)
       else:
         print(f"❌ No se pudo procesar la solicitud para {fila['Nombres']} debido a un error en la generación del documento.")
   except FileNotFoundError: 
