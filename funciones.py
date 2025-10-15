@@ -11,17 +11,10 @@ from docx2pdf import convert
 
 
 def obtener_superindice(dia):
-  if 11 <= dia <= 13:
-    return "th"
-  elif dia % 10 == 1:
-    return "st"
-  elif dia % 10 == 2:
-    return "nd"
-  elif dia % 10 == 3:
-    return "rd"
-  else:
-    return "th"
-  
+  if 10 < dia < 14:
+    return("th")
+  si = {1: "st", 2: "nd", 3: "th"}
+  return si.get(dia % 10, "th")  
 
 def formatear_fecha(fecha_x, idioma, detalle_servicio):
   if "Examen de comprensión de textos" in detalle_servicio:
