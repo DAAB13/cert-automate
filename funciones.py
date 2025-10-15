@@ -8,6 +8,7 @@ from docx.shared import Pt
 from docxtpl import DocxTemplate
 from docxtpl import RichText
 from docx2pdf import convert
+from onedrive_link import crear_link_compartir_onedrive
 
 
 def obtener_superindice(dia):
@@ -168,45 +169,44 @@ def generar_documento(fila):
 
 
 def crear_qr_firmar(fila, ruta_pdf):
-  #construir el texto de validacióm para el qr
-  nombre_qr = fila['Nombres']
-  codigo_qr = fila['Código']
-  correo_validacion = 'idiomas@oficinas-upch.pe'
+  """
+  Crea un QR que apunta al vínculo de OneDrive del PDF generado.
+  Requiere que el archivo esté dentro de una carpeta sincronizada de OneDrive.
+  Si no se puede generar el vínculo, no inserta el QR y muestra un error.
+  """
+  try:
+    # 1) Obtener link de OneDrive ("Copiar vínculo") para el PDF
+    link = crear_link_compartir_onedrive(ruta_pdf)
+    if not link:
+      print("❌ No se pudo generar el vínculo de OneDrive para el QR.")
+      return
 
-  texto_qr = f"""
-Idiomas Cayetano
----------------------
-Estudiante: {nombre_qr}
-Cod_documento: {str(codigo_qr)}
----------------------
-Para corroborar la autenticidad de este documneto, por favor envíe un correo a:
-{correo_validacion}
-"""
-  #Creación de la imagen QR
-  qr_img = qrcode.make(texto_qr)
-  ruta_qr_temp = os.path.join(config.RUTA_TEMP_QR, f"{fila['Código']}_qr.png")
-  qr_img.save(ruta_qr_temp)
-  print("imagen QR de validación creada")
+    # 2) Crear imagen QR con el vínculo
+    qr_img = qrcode.make(link)
+    ruta_qr_temp = os.path.join(config.RUTA_TEMP_QR, f"{fila['Código']}_qr.png")
+    qr_img.save(ruta_qr_temp)
+    print("QR con vínculo de OneDrive creado")
 
-  #Insertar qr en el pdf
-  doc_pdf = fitz.open(ruta_pdf) #abre el documneto pdf que fue creaado en la fase anterior
-  pagina = doc_pdf[0] #la primera página
-  ancho_qr = 95 #1 inch
+    # 3) Insertar QR en el PDF
+    doc_pdf = fitz.open(ruta_pdf)
+    pagina = doc_pdf[0]
+    ancho_qr = 95
 
-  detalle_servicio = fila['Detalle de servicio']
-  if "Examen de comprensión de textos" in detalle_servicio:
-    pos_x = pagina.rect.width - ancho_qr - 70
-    pos_y = pagina.rect.height - ancho_qr - 99
-  else:
-    pos_x = 95
-    pos_y = pagina.rect.height - ancho_qr - 68
+    detalle_servicio = fila['Detalle de servicio']
+    if "Examen de comprensión de textos" in detalle_servicio:
+      pos_x = pagina.rect.width - ancho_qr - 70
+      pos_y = pagina.rect.height - ancho_qr - 99
+    else:
+      pos_x = 95
+      pos_y = pagina.rect.height - ancho_qr - 68
 
-  rectangulo_qr = fitz.Rect(pos_x, pos_y, pos_x + ancho_qr, pos_y + ancho_qr)
-  pagina.insert_image(rectangulo_qr, filename = ruta_qr_temp)
+    rectangulo_qr = fitz.Rect(pos_x, pos_y, pos_x + ancho_qr, pos_y + ancho_qr)
+    pagina.insert_image(rectangulo_qr, filename=ruta_qr_temp)
 
-  # Guardado y limpieza
-  doc_pdf.saveIncr()
-  doc_pdf.close()
-  os.remove(ruta_qr_temp)
-
+    # 4) Guardar y limpiar
+    doc_pdf.saveIncr()
+    doc_pdf.close()
+    os.remove(ruta_qr_temp)
+  except Exception as e:
+    print(f"❌ Error al crear e insertar el QR: {e}")
 
