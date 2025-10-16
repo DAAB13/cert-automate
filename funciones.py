@@ -60,7 +60,7 @@ def procesar_nivel(fila, idioma, detalle_servicio):
       if idioma != "Español":
         resultado_traducido = config.NIVEL_TRADUCCION.get(idioma.lower(), {}).get(descripcion.strip().lower(), descripcion.strip())
         return {'descripcion': resultado_traducido.capitalize(), 'mce': mce}
-      return {'descripcion': descripcion.stri().capitalize(), 'mce': mce}
+      return {'descripcion': descripcion.strip().capitalize(), 'mce': mce}
     return {'descripcion': resultado_examen, 'mce': None} 
   if "Examen de comprensión de textos" in detalle_servicio:
     nivel_original = fila["Resultado examen o curso"]
@@ -101,11 +101,22 @@ def formatear_longitud_nombre(nombre_str):
     font = 'Open Sans',
     size = font_size * 2,
     bold = True,
-    color = "#808080"
+    color = "#808080",
+    style='NombreTight'
   )
   return rt
 #--------------------------------------------------------------------------
-
+def extraer_apellido(nombre_str):
+  try:
+    texto = str(nombre_str).strip()
+  except Exception:
+    return str(nombre_str)
+  if ',' in texto:
+    return texto.split(',', 1)[0].strip()
+  partes = texto.split()
+  if len(partes) >= 2:
+    return ' '.join(partes[-2:]).strip()
+  return texto
 
 def generar_documento(fila):
   print(f"Generando documento para {fila['Nombres']}")
@@ -152,7 +163,8 @@ def generar_documento(fila):
     doc = DocxTemplate(ruta_plantilla)
     doc.render(contexto) #toma el diccionario 'contexto' y recorre el documento de word
 
-    nombre_archivo = f"{fila['Código']} - {detalle_servicio} - {idioma} - {fila['Nombres']}" # el nombre del archivo final
+    apellidos = extraer_apellido(fila['Nombres'])
+    nombre_archivo = f"{fila['Código']} - {detalle_servicio} - {idioma} - {apellidos}" # el nombre del archivo final
     ruta_salida_docx = os.path.join(config.RUTA_SALIDAS, f"{nombre_archivo}.docx") #une la ruta hacia tu carpeta de salida
     ruta_salida_pdf = os.path.join(config.RUTA_SALIDAS, f"{nombre_archivo}.pdf")
     doc.save(ruta_salida_docx)
