@@ -7,8 +7,8 @@ print(len(b))
 c = "Corrales Albujar, Valeria Derly Albina"
 print(len(c))
 
-d = "Vizquerra Guevara, Pablo Gerardo"
+d = "Hurtado Ollero, Shaloom Samantha"
 print(len(d))
 
-e = "Luque Delgado, Laura Angela Milagros"
+e = "Torres Huacani, Betzabe Adelaida"
 print(len(e))
